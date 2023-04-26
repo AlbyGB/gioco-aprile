@@ -23,7 +23,9 @@ public class Game extends PApplet {
         System.out.println(loadedTiles);
         var mapGenerator = new MapGenerator(loadedTiles, this.getGraphics());
         var mapDisplayer = new MapDisplayer(this.getGraphics());
+        var salt = System.currentTimeMillis();
         mapGenerator.generateMap();
+        System.out.println(System.currentTimeMillis() - salt);
         mapDisplayer.display(mapGenerator.getMap());
     }
 

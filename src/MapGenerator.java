@@ -7,7 +7,7 @@ public class MapGenerator {
     // private static final Integer WIDTH = 800;
     // private static final Integer HEIGHT = 600;
     private static final Integer CELL = 16;
-    private static final Integer FLOOR_CELLS = 5000;
+    private static final Integer FLOOR_CELLS = 1000;
 
     private final PGraphics pg;
     private final HashMap<Integer, PImage> mapElements;
@@ -36,14 +36,15 @@ public class MapGenerator {
         // tile 90 per la chiave
         for (var c = 0; c < mapWidth; c++) {
             for (var r = 0; r < mapHeight; r++) {
-                mapScheme[c][r] = 67;
+                mapScheme[c][r] = 96;
             }
         }
 
         var floorCellsCounter = 0;
         var halfWidth = (int) (mapWidth*0.5f);
         var halfHeight = (int) (mapHeight*0.5f);
-        var startCell = mapScheme[(int) (mapWidth*0.5f)][(int) (mapHeight*0.5f)]; // centro della mappa
+        // var startCell = mapScheme[(int) (mapWidth*0.5f)][(int) (mapHeight*0.5f)];
+        // var startCell = mapScheme[0][0];// centro della mappa
         var randomGenerator = new Random();
         Integer[] possibleSteps = new Integer[3];
 
@@ -51,7 +52,7 @@ public class MapGenerator {
         possibleSteps[1] = 0;
         possibleSteps[2] = 1;
 
-        startCell = 96; // numero della tile del pavimento
+        //startCell = 96; // numero della tile del pavimento
         floorCellsCounter += 1;
 
         var currentWidth = halfWidth;
@@ -65,10 +66,9 @@ public class MapGenerator {
 
                 if (currentHeight+possibleSteps[heightRandomStep] < 0 || currentHeight+possibleSteps[heightRandomStep] >= mapHeight) {
                     continue;
-                } else {
-                    if (mapScheme[currentWidth][(currentHeight+possibleSteps[heightRandomStep])] == 67) {
-                        mapScheme[currentWidth][(currentHeight+possibleSteps[heightRandomStep])] = 96;
-                    }
+                } else if (mapScheme[currentWidth][(currentHeight+possibleSteps[heightRandomStep])] == 96) {
+                    mapScheme[currentWidth][(currentHeight+possibleSteps[heightRandomStep])] = 17;
+                    floorCellsCounter += 1;
                 }
 
                 currentHeight += possibleSteps[heightRandomStep];
@@ -76,16 +76,12 @@ public class MapGenerator {
 
             if (currentWidth+possibleSteps[randomStep] < 0 || currentWidth+possibleSteps[randomStep] >= mapWidth) {
                 continue;
-            } else {
-                if (mapScheme[currentWidth+possibleSteps[randomStep]][(currentHeight)] == 67) {
-                    mapScheme[currentWidth+possibleSteps[randomStep]][(currentHeight)] = 96;
-                }
+            } else if (mapScheme[currentWidth+possibleSteps[randomStep]][(currentHeight)] == 96) {
+                mapScheme[currentWidth+possibleSteps[randomStep]][(currentHeight)] = 17;
+                floorCellsCounter += 1;
             }
 
-
             currentWidth += possibleSteps[randomStep];
-
-            floorCellsCounter += 1;
         }
 
         for (var c = 0; c < mapWidth; c++) {
