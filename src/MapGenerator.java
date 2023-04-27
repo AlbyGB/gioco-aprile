@@ -1,5 +1,6 @@
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PVector;
 
 import java.util.*;
 
@@ -17,18 +18,13 @@ public class MapGenerator {
     private final Integer mapWidth;
     private final Integer mapHeight;
 
-    public MapGenerator(List<PImage> loadedTiles, PGraphics pg) {
+    public MapGenerator(HashMap<Integer, PImage> mapElements, PGraphics pg) {
         this.pg = pg;
-        this.tiles = new ArrayList<>(loadedTiles);
-        this.mapElements = new HashMap<>();
+        this.mapElements = mapElements;
         this.mapWidth = this.pg.width/CELL;
         this.mapHeight = this.pg.height/CELL;
         this.mapScheme = new Integer[mapWidth][mapHeight];
         this.map = new PImage[mapWidth][mapHeight];
-
-        for (var i = 0; i < tiles.size(); i++) {
-            mapElements.put(i, tiles.get(i));
-        }
     }
 
     public void generateMap() {
@@ -89,6 +85,20 @@ public class MapGenerator {
                 map[c][r] = mapElements.get(mapScheme[c][r]);
             }
         }
+    }
+
+    public PVector getRandomFloorCell() {
+        var random = new Random();
+        int x = random.nextInt(mapWidth);
+        int y = random.nextInt(mapHeight);;
+
+        while (mapScheme[x][y] != 17) {
+            x = random.nextInt(mapWidth);
+            y = random.nextInt(mapHeight);
+        }
+
+
+        return new PVector(x*16, y*16);
     }
 
     public PGraphics getPg() {
