@@ -1,10 +1,19 @@
-public abstract class Entity {
-    private Integer health;
-    private final EntityType entityType;
+import processing.core.PGraphics;
+import processing.core.PVector;
 
-    public Entity(EntityType entityType) {
+public abstract class Entity {
+    protected Integer health;
+    protected final EntityType entityType;
+    protected PVector coords;
+    protected final Integer tileNumber;
+    protected final PGraphics pg;
+
+    public Entity(EntityType entityType, Integer tileNumber, PGraphics pg) {
+        this.tileNumber = tileNumber;
+        this.pg = pg;
         this.health = 100;
         this.entityType = entityType;
+        this.coords = new PVector();
     }
 
     public Integer getHealth() {

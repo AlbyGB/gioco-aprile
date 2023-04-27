@@ -1,6 +1,9 @@
+import processing.core.PGraphics;
+
 public class Enemy extends Entity {
 
-    public Enemy() {
-        super(EntityType.ENEMY);
+    public Enemy(PGraphics pg) {
+        super(EntityType.ENEMY, 11, pg);
     }
+
 }
