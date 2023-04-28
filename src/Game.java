@@ -56,17 +56,33 @@ public class Game extends PApplet {
     @Override
     public void keyPressed() {
         switch (key) {
-            case 119 -> {
-                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 - 1)] != 96) player.up();
+            case 119 -> { // mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 - 1)][(int) (player.getCoords().y/16)] != 96)
+                if (player.getCoords().y/16 - 1 >= 0) {
+                    if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 - 1)] != 96) {
+                        player.up();
+                    }
+                }
             }
             case 97 -> {
-                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 - 1)][(int) (player.getCoords().y/16)] != 96) player.left();
+                if (player.getCoords().x/16 - 1 >= 0) {
+                    if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 - 1)][(int) (player.getCoords().y/16)] != 96) {
+                        player.left();
+                    }
+                }
             }
             case 115 -> {
-                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 + 1)] != 96) player.down();
+                if (player.getCoords().y/16 + 1 < mapGenerator.getMapHeight()) {
+                    if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16) + 1] != 96) {
+                        player.down();
+                    }
+                }
             }
             case 100 -> {
-                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 + 1)][(int) (player.getCoords().y/16)] != 96) player.right();
+                if (player.getCoords().x/16 + 1 < mapGenerator.getMapWidth()) {
+                    if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 + 1)][(int) (player.getCoords().y/16)] != 96) {
+                        player.right();
+                    }
+                }
             }
         }
     }
