@@ -161,7 +161,7 @@ public class Game extends PApplet {
                 }
 
                 enemies.forEach(enemy -> {
-                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                    enemy.move(mapGenerator);
                 });
 
             }
@@ -173,7 +173,7 @@ public class Game extends PApplet {
                 }
 
                 enemies.forEach(enemy -> {
-                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                    enemy.move(mapGenerator);
                 });
             }
             case 115 -> {
@@ -185,7 +185,7 @@ public class Game extends PApplet {
                 }
 
                 enemies.forEach(enemy -> {
-                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                    enemy.move(mapGenerator);
                 });
             }
             case 100 -> {
@@ -197,7 +197,7 @@ public class Game extends PApplet {
                 }
 
                 enemies.forEach(enemy -> {
-                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                    enemy.move(mapGenerator);
                 });
             }
             case 114 -> setup();
