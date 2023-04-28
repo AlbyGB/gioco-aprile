@@ -98,6 +98,7 @@ public class Game extends PApplet {
             enemy.draw(mapElements);
         });
 
+
         // health bar
         fill(237, 231, 225, 60);
         rect(player.getCoords().x - 2, player.getCoords().y - 4, 20, 3);
@@ -138,17 +139,31 @@ public class Game extends PApplet {
                 item.remove();
             }
         }
+
+        enemies.forEach(enemy -> {
+            if (player.getCoords().x == enemy.getCoords().x && player.getCoords().y == enemy.getCoords().y && enemy.getCanAttackValue()) {
+                player.damage(player.getHealth() - 30);
+                enemy.setCanAttack(false);
+            } else if (player.getCoords().x != enemy.getCoords().x || player.getCoords().y != enemy.getCoords().y) {
+                enemy.setCanAttack(true);
+            }
+        });
     }
 
     @Override
     public void keyPressed() {
         switch (key) {
-            case 119 -> { // mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 - 1)][(int) (player.getCoords().y/16)] != 96)
+            case 119 -> {
                 if (player.getCoords().y/16 - 1 >= 0) {
                     if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 - 1)] != 96) {
                         player.up();
                     }
                 }
+
+                enemies.forEach(enemy -> {
+                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                });
+
             }
             case 97 -> {
                 if (player.getCoords().x/16 - 1 >= 0) {
@@ -156,20 +171,34 @@ public class Game extends PApplet {
                         player.left();
                     }
                 }
+
+                enemies.forEach(enemy -> {
+                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                });
             }
             case 115 -> {
                 if (player.getCoords().y/16 + 1 < mapGenerator.getMapHeight()) {
                     if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16) + 1] != 96) {
                         player.down();
+
                     }
                 }
+
+                enemies.forEach(enemy -> {
+                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                });
             }
             case 100 -> {
                 if (player.getCoords().x/16 + 1 < mapGenerator.getMapWidth()) {
                     if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 + 1)][(int) (player.getCoords().y/16)] != 96) {
                         player.right();
+
                     }
                 }
+
+                enemies.forEach(enemy -> {
+                    enemy.move(mapGenerator.getMapScheme(), mapGenerator);
+                });
             }
             case 114 -> setup();
             case 112 -> {

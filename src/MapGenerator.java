@@ -28,7 +28,6 @@ public class MapGenerator {
     }
 
     public void generateMap() {
-        // tile 67 per il muro
         // tile 90 per la chiave
         for (var c = 0; c < mapWidth; c++) {
             for (var r = 0; r < mapHeight; r++) {
