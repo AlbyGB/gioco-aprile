@@ -2,19 +2,23 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class Game extends PApplet {
     private final static HashMap<Integer, PImage> mapElements = new HashMap<>();
+
+    private static File[] files;
     private Player player;
     private MapGenerator mapGenerator;
     private MapDisplayer mapDisplayer;
     private ArrayList<PVector> currentWallCoords;
+    private Key doorKey;
+    private Door door;
+    private List<Enemy> enemies;
+    private List<EatableItem> items;
+    private Integer enemiesNumber;
+    private Integer itemsNumber;
 
     public static void main(String[] args) {
         var game = new Game();
@@ -27,7 +31,8 @@ public class Game extends PApplet {
 
     @Override
     public void setup() {
-        File[] files = new File("assets/kenneyrouguleike/Tiles/Colored").listFiles();
+        files = new File("assets/kenneyrouguleike/Tiles/Colored").listFiles();
+        var randomGenerator = new Random();
 
         var loadedTiles = Arrays.stream(Objects.requireNonNull(files)).map(file -> loadImage(file.getPath())).toList();
         loadedTiles.forEach(tile -> tile.resize(16, 16));
@@ -45,12 +50,94 @@ public class Game extends PApplet {
         player.setCoords(mapGenerator.getRandomFloorCell());
 
         currentWallCoords = mapGenerator.getWallsCoords();
+
+        doorKey = new Key(this.getGraphics());
+        door = new Door(this.getGraphics());
+
+        doorKey.setCoords(mapGenerator.getRandomFloorCell());
+        door.setCoords(mapGenerator.getRandomFloorCell());
+
+        enemiesNumber = randomGenerator.nextInt(6) + 1;
+        itemsNumber = randomGenerator.nextInt(6) + 1;
+
+        enemies = new ArrayList<>();
+        items = new ArrayList<>();
+
+        for (var e = 0; e < enemiesNumber; e++) {
+            enemies.add(new Enemy(this.getGraphics()));
+        }
+
+        for (var it = 0; it < itemsNumber; it++) {
+            items.add(new EatableItem(itemsNumber + it, this.getGraphics()));
+        }
+
+        enemies.forEach(enemy -> {
+            enemy.setCoords(mapGenerator.getRandomFloorCell());
+        });
+
+        items.forEach(item -> {
+            item.setCoords(mapGenerator.getRandomFloorCell());
+        });
     }
 
     @Override
     public void draw() {
         mapDisplayer.display(mapGenerator.getMap());
+
+        if (doorKey.isDrawable()) doorKey.draw(mapElements);
+
+        door.draw(mapElements);
+
+        items.forEach(item -> {
+            item.draw(mapElements);
+        });
+
         player.draw(mapElements);
+
+        enemies.forEach(enemy -> {
+            enemy.draw(mapElements);
+        });
+
+        // health bar
+        fill(237, 231, 225, 60);
+        rect(player.getCoords().x - 2, player.getCoords().y - 4, 20, 3);
+        fill(237, 231, 225, 60);
+
+        fill(0,128,0, 1000);
+        rect(player.getCoords().x - 3, player.getCoords().y - 4, player.getHealth()*(1/5f), 3);
+        fill(0,128,0, 1000);
+
+        if (player.getCoords().x == doorKey.getCoords().x && player.getCoords().y == doorKey.getCoords().y) {
+            doorKey.remove();
+            player.setHasKey(true);
+            door.setTileNumber(37);
+        }
+
+        if (player.getCoords().x == door.getCoords().x && player.getCoords().y == door.getCoords().y && player.checkForKey()) {
+            setup();
+        }
+
+        if (player.getHealth() < 0) {
+            setup();
+        }
+
+        for (EatableItem item : items) {
+            if (item.getCoords().x == player.getCoords().x
+                    && item.getCoords().y == player.getCoords().y
+                    && item.getEatableItemType().equals(EatableItemType.HEALTH)
+                    && item.doesExist()
+                    && (player.getHealth() + 10) <= 100
+            ) {
+                player.heal(player.getHealth() + 10);
+                item.remove();
+            } else if (item.getCoords().x == player.getCoords().x
+                    && item.getCoords().y == player.getCoords().y
+                    && item.getEatableItemType().equals(EatableItemType.DAMAGE)
+                    && item.doesExist()) {
+                player.damage(player.getHealth() - 30);
+                item.remove();
+            }
+        }
     }
 
     @Override
@@ -84,11 +171,37 @@ public class Game extends PApplet {
                     }
                 }
             }
+            case 114 -> setup();
+            case 112 -> {
+                if (looping) {
+                    noLoop();
+                } else {
+                    loop();
+                }
+                options();
+            }
+
         }
     }
 
     @Override
     public void settings() {
         size(800, 640);
+    }
+
+    private void options() {
+        var pausedString = "PAUSED";
+        var displayedString = """
+                esc -> exit
+                r -> restart
+                """;
+
+        textSize(50);
+        text(pausedString, 200, 100);
+        fill(255, 255, 255);
+
+        textSize(100);
+        text(displayedString, 200, getGraphics().height/2f - 50);
+        fill(255, 255, 255);
     }
 }

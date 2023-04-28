@@ -1,4 +1,5 @@
 public enum EatableItemType {
-    POSITIVE,
-    NEGATIVE
+    HEALTH,
+    DAMAGE,
+    ENERGY
 }

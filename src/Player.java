@@ -6,19 +6,16 @@ import java.util.HashMap;
 
 public class Player extends Entity {
     private Float energy;
+    private boolean hasKey;
 
     public Player(PGraphics pg) {
         super(EntityType.PLAYER, 15, pg);
         this.energy = 0f;
+        this.hasKey = false;
     }
 
-    public void setCoords(PVector coords) {
-        this.coords.x = coords.x;
-        this.coords.y = coords.y;
-    }
-
-    public void draw(HashMap<Integer, PImage> mapElements) {
-        pg.image(mapElements.get(tileNumber), coords.x, coords.y);
+    public void heal(int health) {
+        this.health = health;
     }
 
     public void up() {
@@ -35,5 +32,25 @@ public class Player extends Entity {
 
     public void right() {
         coords.x += 16;
+    }
+
+    public Float getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(Float energy) {
+        this.energy = energy;
+    }
+
+    public void setHasKey(boolean hasKey) {
+        this.hasKey = hasKey;
+    }
+
+    public boolean checkForKey() {
+        return hasKey;
+    }
+
+    public void damage(int health) {
+        this.health = health;
     }
 }
