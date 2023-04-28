@@ -30,14 +30,15 @@ public class Enemy extends Entity {
             this.coords.x += 16;
         }
 
-        // check for wall collisions
-        if ((this.coords.y/16)-16 < 0) {
+        // check for wall and border collisions
+        // TODO fix this
+        if ((this.coords.y/16)-1 < 0 || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
             this.coords.y += 16;
-        } else if ((this.coords.y/16)+16 > mg.getMapHeight()) {
+        } else if ((this.coords.y/16)+1 > mg.getMapHeight() || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
             this.coords.y -= 16;
-        } else if ((this.coords.x/16)-16 < 0) {
+        } else if ((this.coords.x/16)-1 < 0 || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
             this.coords.x += 16;
-        } else if ((this.coords.x/16)+16 > mg.getMapWidth()) {
+        } else if ((this.coords.x/16)+1 > mg.getMapWidth() || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
             this.coords.x -= 16;
         }
     }
