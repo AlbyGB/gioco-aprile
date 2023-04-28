@@ -1,7 +1,10 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PVector;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -11,6 +14,7 @@ public class Game extends PApplet {
     private Player player;
     private MapGenerator mapGenerator;
     private MapDisplayer mapDisplayer;
+    private ArrayList<PVector> currentWallCoords;
 
     public static void main(String[] args) {
         var game = new Game();
@@ -39,6 +43,8 @@ public class Game extends PApplet {
 
         player = new Player(getGraphics());
         player.setCoords(mapGenerator.getRandomFloorCell());
+
+        currentWallCoords = mapGenerator.getWallsCoords();
     }
 
     @Override
@@ -50,10 +56,18 @@ public class Game extends PApplet {
     @Override
     public void keyPressed() {
         switch (key) {
-            case 119 -> player.up();
-            case 97 -> player.left();
-            case 115 -> player.down();
-            case 100 -> player.right();
+            case 119 -> {
+                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 - 1)] != 96) player.up();
+            }
+            case 97 -> {
+                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 - 1)][(int) (player.getCoords().y/16)] != 96) player.left();
+            }
+            case 115 -> {
+                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16)][(int) (player.getCoords().y/16 + 1)] != 96) player.down();
+            }
+            case 100 -> {
+                if (mapGenerator.getMapScheme()[(int) (player.getCoords().x/16 + 1)][(int) (player.getCoords().y/16)] != 96) player.right();
+            }
         }
     }
 

@@ -16,6 +16,18 @@ public abstract class Entity {
         this.coords = new PVector();
     }
 
+    public PVector getCoords() {
+        return coords;
+    }
+
+    public Integer getTileNumber() {
+        return tileNumber;
+    }
+
+    public PGraphics getPg() {
+        return pg;
+    }
+
     public Integer getHealth() {
         return health;
     }

@@ -48,7 +48,7 @@ public class MapGenerator {
         possibleSteps[1] = 0;
         possibleSteps[2] = 1;
 
-        //startCell = 96; // numero della tile del pavimento
+        //startCell = 96; // numero della tile del muro
         floorCellsCounter += 1;
 
         var currentWidth = halfWidth;
@@ -85,6 +85,19 @@ public class MapGenerator {
                 map[c][r] = mapElements.get(mapScheme[c][r]);
             }
         }
+    }
+
+    // da ottimizzare
+    public ArrayList<PVector> getWallsCoords() {
+        ArrayList<PVector> coordList = new ArrayList<>();
+
+        for (var c = 0; c < mapWidth; c++) {
+            for (var r = 0; r < mapHeight; r++) {
+                if (mapScheme[c][r] == 96) coordList.add(new PVector(c*16, r*16));
+            }
+        }
+
+        return coordList;
     }
 
     public PVector getRandomFloorCell() {
