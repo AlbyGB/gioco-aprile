@@ -12,34 +12,41 @@ public class Enemy extends Entity {
     }
 
     // simple movements system
-    public void move(Integer[][] mapScheme, MapGenerator mg) {
+    public void move(MapGenerator mg) {
         var randomGenerator = new Random();
+        boolean hasMoved = false;
+        int movement;
 
-        var movement = randomGenerator.nextInt(0, 4);
+        while (!hasMoved) {
 
-        // int modX = (int) this.coords.x / 16;
-        // int modY = (int) this.coords.y / 16;
+            movement = randomGenerator.nextInt(0, 4);
 
-        if (movement == 0) {
-            this.coords.y -= 16;
-        } else if (movement == 1) {
-            this.coords.y += 16;
-        } else if (movement == 2) {
-            this.coords.x -= 16;
-        } else {
-            this.coords.x += 16;
-        }
-
-        // check for wall and border collisions
-        // TODO fix this
-        if ((this.coords.y/16)-1 < 0 || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
-            this.coords.y += 16;
-        } else if ((this.coords.y/16)+1 > mg.getMapHeight() || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
-            this.coords.y -= 16;
-        } else if ((this.coords.x/16)-1 < 0 || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
-            this.coords.x += 16;
-        } else if ((this.coords.x/16)+1 > mg.getMapWidth() || mg.getMapScheme()[(int) this.coords.x/16][(int) (this.coords.y/16)] == 96) {
-            this.coords.x -= 16;
+            switch (movement) {
+                case 0 -> {
+                    if ((int) (this.getCoords().y / 16 - 1) >= 0 && !(mg.getMapScheme()[(int) (this.getCoords().x / 16)][(int) (this.getCoords().y / 16 - 1)] == 96)) {
+                        this.getCoords().y -= 16;
+                        hasMoved = true;
+                    }
+                }
+                case 1 -> {
+                    if ((int) (this.getCoords().y / 16 + 1) < mg.getMapHeight() && !(mg.getMapScheme()[(int) (this.getCoords().x / 16)][(int) (this.getCoords().y / 16 + 1)] == 96)) {
+                        this.getCoords().y += 16;
+                        hasMoved = true;
+                    }
+                }
+                case 2 -> {
+                    if ((int) (this.getCoords().x / 16 - 1) >= 0 && !(mg.getMapScheme()[(int) (this.getCoords().x / 16 - 1)][(int) (this.getCoords().y / 16)] == 96)) {
+                        this.getCoords().x -= 16;
+                        hasMoved = true;
+                    }
+                }
+                case 3 -> {
+                    if ((int) (this.getCoords().x / 16 + 1) < mg.getMapWidth() && !(mg.getMapScheme()[(int) (this.getCoords().x / 16 + 1)][(int) (this.getCoords().y / 16)] == 96)) {
+                        this.getCoords().x += 16;
+                        hasMoved = true;
+                    }
+                }
+            }
         }
     }
 
